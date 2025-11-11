@@ -5,43 +5,35 @@ import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 
 const appContent: Record<string, { title: string; description: string }> = {
-  dashboard: {
-    title: "Panel de Control",
-    description: "Vista general de tu negocio y métricas importantes"
+  capacitaciones: {
+    title: "Capacitaciones",
+    description: "Sistema de gestión de capacitaciones y certificados"
   },
-  users: {
-    title: "Gestión de Usuarios",
-    description: "Administra los usuarios de tu sistema"
+  matriz: {
+    title: "Matriz de Cargos",
+    description: "Gestión de perfiles y competencias laborales"
   },
-  documents: {
-    title: "Gestión Documental",
-    description: "Organiza y gestiona todos tus documentos"
+  requisicion: {
+    title: "Requisición",
+    description: "Sistema de requisiciones y aprobaciones"
   },
-  analytics: {
-    title: "Análisis y Reportes",
-    description: "Visualiza estadísticas y genera reportes"
+  evaluacion: {
+    title: "Evaluación",
+    description: "Evaluación de desempeño del personal"
   },
-  calendar: {
-    title: "Calendario",
-    description: "Gestiona eventos y citas"
+  nomina: {
+    title: "Nómina",
+    description: "Gestión de nómina y pagos"
   },
-  messages: {
-    title: "Mensajería",
-    description: "Comunicación interna del equipo"
-  },
-  sales: {
-    title: "Sistema de Ventas",
-    description: "Gestiona tus ventas y clientes"
-  },
-  settings: {
-    title: "Configuración",
-    description: "Ajusta las preferencias del sistema"
+  reportes: {
+    title: "Reportes",
+    description: "Centro de reportes y análisis"
   }
 };
 
 const AppPage = () => {
   const { appId } = useParams();
-  const content = appId ? appContent[appId] : { title: "Aplicación", description: "" };
+  const content = (appId && appContent[appId]) ? appContent[appId] : { title: "Aplicación", description: "Selecciona una aplicación válida" };
 
   return (
     <AppLayout>
