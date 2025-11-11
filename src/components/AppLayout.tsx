@@ -102,8 +102,8 @@ const AppLayout = ({ children }: AppLayoutProps) => {
     setTimeout(() => navigate("/"), 500);
   };
 
-  const CurrentIcon = appId ? appIcons[appId] : LayoutDashboard;
-  const currentAppName = appId ? appNames[appId] : "Aplicación";
+  const CurrentIcon = (appId && appIcons[appId]) ? appIcons[appId] : LayoutDashboard;
+  const currentAppName = (appId && appNames[appId]) ? appNames[appId] : "Aplicación";
 
   return (
     <div className="min-h-screen w-full flex bg-background">
