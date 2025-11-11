@@ -35,25 +35,55 @@ interface AppLayoutProps {
 }
 
 const appIcons: Record<string, typeof LayoutDashboard> = {
-  dashboard: LayoutDashboard,
-  users: Users,
-  documents: FileText,
-  analytics: BarChart3,
-  calendar: Calendar,
-  messages: MessageSquare,
-  sales: ShoppingCart,
-  settings: Settings,
+  capacitaciones: LayoutDashboard,
+  matriz: Users,
+  requisicion: FileText,
+  evaluacion: BarChart3,
+  nomina: ShoppingCart,
+  reportes: BarChart3,
 };
 
 const appNames: Record<string, string> = {
-  dashboard: "Dashboard",
-  users: "Usuarios",
-  documents: "Documentos",
-  analytics: "Análisis",
-  calendar: "Calendario",
-  messages: "Mensajes",
-  sales: "Ventas",
-  settings: "Configuración",
+  capacitaciones: "Capacitaciones",
+  matriz: "Matriz de Cargos",
+  requisicion: "Requisición",
+  evaluacion: "Evaluación",
+  nomina: "Nómina",
+  reportes: "Reportes",
+};
+
+const appModules: Record<string, Array<{ name: string; icon: any }>> = {
+  capacitaciones: [
+    { name: "Cursos", icon: FileText },
+    { name: "Asistencias", icon: Users },
+    { name: "Certificados", icon: FileText },
+    { name: "Calendario", icon: Calendar },
+  ],
+  matriz: [
+    { name: "Cargos", icon: Users },
+    { name: "Competencias", icon: BarChart3 },
+    { name: "Evaluaciones", icon: FileText },
+  ],
+  requisicion: [
+    { name: "Solicitudes", icon: FileText },
+    { name: "Aprobaciones", icon: Settings },
+    { name: "Historial", icon: BarChart3 },
+  ],
+  evaluacion: [
+    { name: "Evaluaciones", icon: BarChart3 },
+    { name: "Resultados", icon: FileText },
+    { name: "Reportes", icon: BarChart3 },
+  ],
+  nomina: [
+    { name: "Empleados", icon: Users },
+    { name: "Pagos", icon: ShoppingCart },
+    { name: "Reportes", icon: BarChart3 },
+  ],
+  reportes: [
+    { name: "Dashboard", icon: LayoutDashboard },
+    { name: "Análisis", icon: BarChart3 },
+    { name: "Exportar", icon: FileText },
+  ],
 };
 
 const AppLayout = ({ children }: AppLayoutProps) => {
@@ -106,27 +136,16 @@ const AppLayout = ({ children }: AppLayoutProps) => {
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 p-3 space-y-1">
-          <Button
-            variant="outline"
-            className="w-full justify-start gap-3 border-primary/50 hover:bg-primary/10"
-            onClick={() => navigate("/apps")}
-          >
-            <Grid3x3 className="h-4 w-4" />
-            {!sidebarCollapsed && <span>Cambiar App</span>}
-          </Button>
-
-          <Separator className="my-3" />
-
+        <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
           {/* Current App Info */}
-          <div className={`px-3 py-2 ${sidebarCollapsed ? "text-center" : ""}`}>
+          <div className={`px-3 py-2 mb-4 ${sidebarCollapsed ? "text-center" : ""}`}>
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                <CurrentIcon className="h-5 w-5 text-primary" />
+              <div className="w-10 h-10 rounded-lg bg-gradient-primary flex items-center justify-center flex-shrink-0">
+                <CurrentIcon className="h-5 w-5 text-primary-foreground" />
               </div>
               {!sidebarCollapsed && (
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-foreground truncate">{currentAppName}</p>
+                  <p className="text-sm font-semibold text-foreground truncate">{currentAppName}</p>
                   <p className="text-xs text-muted-foreground">Aplicación actual</p>
                 </div>
               )}
@@ -135,24 +154,55 @@ const AppLayout = ({ children }: AppLayoutProps) => {
 
           <Separator className="my-3" />
 
+          {/* Navigation Modules */}
           <div className="space-y-1">
             <p className={`text-xs font-semibold text-muted-foreground px-3 py-2 ${sidebarCollapsed ? "text-center" : ""}`}>
-              {!sidebarCollapsed && "NAVEGACIÓN"}
+              {!sidebarCollapsed && "MÓDULOS"}
             </p>
-            {/* Aquí irían los items de navegación específicos de cada app */}
+            {appId && appModules[appId]?.map((module) => {
+              const ModuleIcon = module.icon;
+              return (
+                <Button
+                  key={module.name}
+                  variant="ghost"
+                  className="w-full justify-start gap-3 text-muted-foreground hover:text-foreground hover:bg-accent"
+                >
+                  <ModuleIcon className="h-4 w-4" />
+                  {!sidebarCollapsed && <span>{module.name}</span>}
+                </Button>
+              );
+            })}
           </div>
         </nav>
 
         {/* Sidebar Footer */}
         <div className="p-3 border-t border-border space-y-2">
+          {/* User Info */}
+          <div className={`px-2 py-2 rounded-lg bg-accent/50 ${sidebarCollapsed ? "text-center" : ""}`}>
+            <div className="flex items-center gap-3">
+              <Avatar className="h-8 w-8 flex-shrink-0">
+                <AvatarFallback className="bg-primary text-primary-foreground text-xs font-semibold">
+                  JD
+                </AvatarFallback>
+              </Avatar>
+              {!sidebarCollapsed && (
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-foreground truncate">John Doe</p>
+                  <p className="text-xs text-muted-foreground truncate">john@empresa.com</p>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Change App Button */}
           <Button
             variant="ghost"
-            size={sidebarCollapsed ? "icon" : "default"}
-            onClick={toggleTheme}
-            className="w-full justify-start gap-3"
+            size={sidebarCollapsed ? "icon" : "sm"}
+            onClick={() => navigate("/apps")}
+            className="w-full justify-start gap-2 text-xs text-muted-foreground hover:text-foreground"
           >
-            {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-            {!sidebarCollapsed && <span>{isDark ? "Modo Claro" : "Modo Oscuro"}</span>}
+            <Grid3x3 className="h-3 w-3" />
+            {!sidebarCollapsed && <span>Cambiar aplicación</span>}
           </Button>
         </div>
       </aside>
@@ -160,14 +210,32 @@ const AppLayout = ({ children }: AppLayoutProps) => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Header */}
-        <header className="h-16 border-b border-border bg-card/50 backdrop-blur-sm flex items-center justify-between px-6 flex-shrink-0">
+        <header className="h-16 border-b border-border bg-card backdrop-blur-sm flex items-center justify-between px-6 flex-shrink-0 shadow-sm">
           <div className="flex items-center gap-4">
-            <div>
-              <h1 className="text-xl font-bold text-foreground">{currentAppName}</h1>
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-lg bg-gradient-primary flex items-center justify-center">
+                <CurrentIcon className="h-5 w-5 text-primary-foreground" />
+              </div>
+              <div>
+                <h1 className="text-lg font-bold text-foreground">{currentAppName}</h1>
+                <p className="text-xs text-muted-foreground">Sistema de Gestión</p>
+              </div>
             </div>
           </div>
 
           <div className="flex items-center gap-3">
+            {/* Theme Toggle */}
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleTheme}
+              className="hover:bg-accent"
+            >
+              {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            </Button>
+
+            <Separator orientation="vertical" className="h-6" />
+
             {/* User Menu */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -177,7 +245,10 @@ const AppLayout = ({ children }: AppLayoutProps) => {
                       JD
                     </AvatarFallback>
                   </Avatar>
-                  <span className="text-sm font-medium">John Doe</span>
+                  <div className="text-left">
+                    <p className="text-sm font-medium text-foreground">John Doe</p>
+                    <p className="text-xs text-muted-foreground">Administrador</p>
+                  </div>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
@@ -186,10 +257,6 @@ const AppLayout = ({ children }: AppLayoutProps) => {
                 <DropdownMenuItem onClick={() => navigate("/profile")}>
                   <UserIcon className="mr-2 h-4 w-4" />
                   <span>Editar Perfil</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => navigate("/apps")}>
-                  <Grid3x3 className="mr-2 h-4 w-4" />
-                  <span>Cambiar Aplicación</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleLogout} className="text-destructive">

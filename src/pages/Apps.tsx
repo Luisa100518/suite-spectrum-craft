@@ -1,86 +1,79 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Separator } from "@/components/ui/separator";
 import { 
   LayoutDashboard, 
   Users, 
   FileText, 
-  Settings, 
   BarChart3, 
-  Calendar,
-  MessageSquare,
   ShoppingCart,
   Moon,
   Sun,
-  LogOut
+  LogOut,
+  User,
+  Grid3x3
 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
 const apps = [
   {
-    id: "dashboard",
-    title: "Dashboard",
-    description: "Panel de control principal",
+    id: "capacitaciones",
+    title: "Capacitaciones",
+    description: "Sistema de gestión de capacitaciones y certificados",
     icon: LayoutDashboard,
     color: "from-blue-500/20 to-blue-600/20",
     iconColor: "text-blue-500"
   },
   {
-    id: "users",
-    title: "Usuarios",
-    description: "Gestión de usuarios",
+    id: "matriz",
+    title: "Matriz de Cargos",
+    description: "Gestión de perfiles y competencias laborales",
     icon: Users,
     color: "from-purple-500/20 to-purple-600/20",
     iconColor: "text-purple-500"
   },
   {
-    id: "documents",
-    title: "Documentos",
-    description: "Gestión documental",
+    id: "requisicion",
+    title: "Requisición",
+    description: "Sistema de requisiciones y aprobaciones",
     icon: FileText,
     color: "from-amber-500/20 to-amber-600/20",
     iconColor: "text-amber-500"
   },
   {
-    id: "analytics",
-    title: "Análisis",
-    description: "Reportes y estadísticas",
+    id: "evaluacion",
+    title: "Evaluación",
+    description: "Evaluación de desempeño del personal",
     icon: BarChart3,
     color: "from-emerald-500/20 to-emerald-600/20",
     iconColor: "text-emerald-500"
   },
   {
-    id: "calendar",
-    title: "Calendario",
-    description: "Agenda y eventos",
-    icon: Calendar,
+    id: "nomina",
+    title: "Nómina",
+    description: "Gestión de nómina y pagos",
+    icon: ShoppingCart,
     color: "from-rose-500/20 to-rose-600/20",
     iconColor: "text-rose-500"
   },
   {
-    id: "messages",
-    title: "Mensajes",
-    description: "Comunicación interna",
-    icon: MessageSquare,
+    id: "reportes",
+    title: "Reportes",
+    description: "Centro de reportes y análisis",
+    icon: BarChart3,
     color: "from-cyan-500/20 to-cyan-600/20",
     iconColor: "text-cyan-500"
-  },
-  {
-    id: "sales",
-    title: "Ventas",
-    description: "Sistema de ventas",
-    icon: ShoppingCart,
-    color: "from-indigo-500/20 to-indigo-600/20",
-    iconColor: "text-indigo-500"
-  },
-  {
-    id: "settings",
-    title: "Configuración",
-    description: "Ajustes del sistema",
-    icon: Settings,
-    color: "from-slate-500/20 to-slate-600/20",
-    iconColor: "text-slate-500"
   }
 ];
 
@@ -105,30 +98,51 @@ const Apps = () => {
   return (
     <div className="min-h-screen w-full bg-gradient-surface">
       {/* Header */}
-      <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-10">
+      <header className="border-b border-border bg-card backdrop-blur-sm sticky top-0 z-10 shadow-sm">
         <div className="container mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-2xl font-bold text-foreground">Suite Empresarial</h1>
-              <p className="text-sm text-muted-foreground">Selecciona una aplicación para continuar</p>
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-lg bg-gradient-primary flex items-center justify-center shadow-glow">
+                <Grid3x3 className="h-6 w-6 text-primary-foreground" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold text-foreground">Suite Empresarial</h1>
+                <p className="text-sm text-muted-foreground">Selecciona una aplicación para comenzar</p>
+              </div>
             </div>
             <div className="flex items-center gap-3">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={toggleTheme}
-                className="hover:bg-primary/10"
-              >
+              <Button variant="ghost" size="icon" onClick={toggleTheme} className="hover:bg-accent">
                 {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
               </Button>
-              <Button
-                variant="outline"
-                onClick={handleLogout}
-                className="gap-2"
-              >
-                <LogOut className="h-4 w-4" />
-                Cerrar Sesión
-              </Button>
+              <Separator orientation="vertical" className="h-6" />
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="gap-2 hover:bg-accent">
+                    <Avatar className="h-8 w-8">
+                      <AvatarFallback className="bg-primary text-primary-foreground text-xs font-semibold">
+                        JD
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="text-left">
+                      <p className="text-sm font-medium text-foreground">John Doe</p>
+                      <p className="text-xs text-muted-foreground">Administrador</p>
+                    </div>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-56">
+                  <DropdownMenuLabel>Mi Cuenta</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => navigate("/profile")}>
+                    <User className="mr-2 h-4 w-4" />
+                    <span>Editar Perfil</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={handleLogout} className="text-destructive">
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Cerrar Sesión</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
         </div>
@@ -138,8 +152,8 @@ const Apps = () => {
       <main className="container mx-auto px-6 py-12">
         <div className="max-w-7xl mx-auto">
           <div className="mb-8 animate-fade-in">
-            <h2 className="text-3xl font-bold text-foreground mb-2">Tus Aplicaciones</h2>
-            <p className="text-muted-foreground">Accede a todas las herramientas de tu suite empresarial</p>
+            <h2 className="text-3xl font-bold text-foreground mb-2">Aplicaciones</h2>
+            <p className="text-muted-foreground">Gestiona diferentes áreas de tu empresa con nuestras aplicaciones especializadas</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
